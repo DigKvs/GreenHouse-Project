@@ -1,75 +1,141 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="estilos/estilo.css">
-    <title>Monitoramento da estufa</title>
+    <title>DigDigDig</title>
+    <link rel="stylesheet" href="style.css"/>
 </head>
-
 <body>
-    <div class="content flex justify-center">
-        <div class="h-full w-50 ">
-            <div class="h-full flex column justify-center">
-                <div class="box flex">
-                    <div class="w-30 flex items-center justify-center">
-                        <img class="icon" src="./imagens/brightness.png" alt="">
-                    </div>
-                    <div class="w-70 flex justify-center items-center">
-                        <div class="data flex column">
-                            <span class="sensor-title">Luminosidade</span>
-                            <span class="sensor-data">50%</span>
-                        </div>
-                    </div>
+    <div class="body">
+        <!-- Morangos decorativos -->
+        <img class="murango1" src="./images/strawberry-svgrepo-com 1.svg" alt="murango">
+        <img class="murango2" src="./images/strawberry-svgrepo-com 1.svg" alt="murango">
+        <img class="murango3" src="./images/strawberry-svgrepo-com 1.svg" alt="murango">
+        <img class="murango4" src="./images/strawberry-svgrepo-com 1.svg" alt="murango">
+        <img class="murango5" src="./images/strawberry-svgrepo-com 1.svg" alt="murango">
+        <img class="murango6" src="./images/strawberry-svgrepo-com 1.svg" alt="murango">
+        
+        <!-- Umidade do ar -->
+        <div class="umid-air cards rounded shadow">
+            <div class="middle collun-start-span2">
+                <img class="umid icons" src="./images/humidity sun.png" alt="humidity air">
+            </div>
+            <div class="text-left middle">
+                <div class="text-cards">
+                    <h1>Humidade externa</h1>
+                    <h2 class="umid-externa">--%</h2>
                 </div>
-                <div class="box flex">
-                    <div class="w-30 flex items-center justify-center">
-                        <img class="icon" src="./imagens/temperatura.png" alt="">
-                    </div>
-                    <div class="w-70 flex justify-center items-center">
-                        <div class="data flex column">
-                            <span class="sensor-title">Temperatura</span>
-                            <span class="sensor-data">21°</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="box flex">
-                    <div class="w-30 flex items-center justify-center">
-                        <img class="icon" src="./imagens/pure-water (1).png" alt="">
-                    </div>
-                    <div class="w-70 flex justify-center items-center">
-                        <div class="data flex column">
-                            <span class="sensor-title">Umidade</span>
-                            <span class="sensor-data">5%</span>
-                        </div>
-                    </div>
+            </div>
+            <div class="text-right middle">
+                <div class="text-cards">
+                    <h1>Humidade interna</h1>
+                    <h2 class="umid-interna">--%</h2>
                 </div>
             </div>
         </div>
-        <div class="h-full w-50 ">
-            <div class="h-full flex column">
-                <div>
-                    <span style="color: white;">Controles manuais</span>
+
+        <!-- Temperatura -->
+        <div class="air-temp cards rounded shadow">
+            <div class="middle collun-start-span2">
+                <img class="sun icons" src="./images/sun.png" alt="sun">
+            </div>
+            <div class="text-left middle">
+                <div class="text-cards">
+                    <h1>Temperatura externa</h1>
+                    <h2 class="temp-externa">--°C</h2>
                 </div>
-                <div class="manual-control h-50 m-3-3">
-                    <div class="flex column">
-                        <div class="button-line flex justify-between">
-                            <div class="button"></div>
-                            <div class="button"></div>
-                        </div>
-                        <div class="button-line flex justify-between">
-                            <div class="button"></div>
-                            <div class="button"></div>
+            </div>
+            <div class="text-right middle">
+                <div class="text-cards">
+                    <h1>Temperatura interna</h1>
+                    <h2 class="temp-interna">--°C</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botões manuais -->
+        <div class="manual1 rounded">
+            <div class="switchs">
+                <div class="automatic">
+                    <div class="switch-container">
+                        <div class="switch">
+                            <span class="switch-text">Manual</span>
+                            <div class="slider"></div>
                         </div>
                     </div>
                 </div>
-                <div class="graphs h-full m-3-3">
-
+                <div class="lamp">
+                    <div class="lampButton shadow bordinha">
+                        <img src="./images/light-bulb-night.png" alt="lamp">
+                    </div>
                 </div>
+            </div>  
+            <div class="button active-raining rounded shadow">
+                <div class="img-manual">
+                    <img src="./images/watering-can.png" alt="gif">            
+                </div>
+                <h1 class="text-button">Ativar Irrigação</h1>
+            </div>
+        </div>
+
+        <!-- Umidade do solo -->
+        <div class="umid-ground cards rounded shadow">
+            <div class="middle row-start2 collun-start-span2">
+                <img class="umid-g icons" src="./images/greenhouse humidity.png" alt="humidity ground">
+            </div>
+            <div class="umid-air-text middle">
+                <div class="text-cards2">
+                    <h1>Humidade do Solo interna</h1>
+                    <h2 class="solo-interno">--%</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Indicadores -->
+        <div class="display">
+            <div class="raining grid-active rounded40">
+                <h1 class="text-active">Irrigação</h1>
+                <div class="middle">
+                    <img id="fan" class="gifs" src="./gifs/tap-unscreen.gif" alt="gif">
+                </div>
+            </div>
+            <div class="airdrop grid-active rounded40">
+                <h1 class="text-active">Ventilação</h1>
+                <div class="middle">
+                    <img id="fan" class="gifs" src="./gifs/fan-unscreen.gif" alt="gif">
+                </div>
+            </div>
+            <div class="door grid-active rounded40">
+                <h1 class="text-active">Comporta</h1>
+                <div class="middle">
+                    <img id="fan" class="gifs" src="./gifs/gate-unscreen.gif" alt="gif">
+                </div>
+            </div>
+            <div class="tank rounded40">
+                <div class="water rounded"></div>
+            </div>
+        </div>
+
+        <!-- Botões extras -->
+        <div class="manual2 rounded">
+            <div class="button rounded active-airdrop shadow">
+                <div class="img-manual">
+                    <img src="./images/hurricane.png" alt="gif">
+                </div>
+                <h1 class="text-button">Ativar Ventilação</h1>
+            </div>
+            <div class="button rounded active-door shadow">
+                <div class="img-manual">
+                    <img src="./images/closed-sign.png" alt="gif">
+                </div>
+                <h1 class="text-button">Ativar Comporta</h1>
             </div>
         </div>
     </div>
-</body>
 
+    <script src="script.js"></script>
+    <script type="module" src="./scripts/sensorLoader.js"></script>
+</body>
 </html>

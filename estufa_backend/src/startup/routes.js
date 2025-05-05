@@ -1,8 +1,7 @@
-const express = require('express');
-const person = require('../routes/person');
+const bodyParser = require('body-parser');
+const sensors = require('../routes/Sensor');
 
-
-module.exports = function (app) {
-    app.use(express.json());
-    app.use('/api/person', person);
-}
+module.exports = (app) => {
+    app.use(bodyParser.json());
+    app.use('/sensors', sensors);
+};
