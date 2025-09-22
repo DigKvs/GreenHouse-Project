@@ -1,94 +1,100 @@
+import { service } from "./firebaseConnect.js";
+
+service.user = "GreenHouse";
+
+// ----------------------- FUNÇÃO PARA ENVIAR ------------------------
+const set_data = async () => {
+    let variavel = {}
+    try
+    {
+        variavel = await service.load()
+    }
+    catch(e)
+    {
+        console.log(e)
+    }
+    
+    variavel.Acionadores = {"Irrigação" :  button1 ? 1 : 0, "Ventilação": button2 ? 1 : 0}
+    variavel.Modos = {"Manual": isAutomatic ? 0 : 1, "Luz": lampON ? 1 : 0, "Comporta": button3 ? 1 : 0}
+  service.set(variavel);
+};
+
+// ----------------------- BOTÕES -----------------------
 let lampButton = document.querySelector(".lampButton");
-let lampON = false
+export let lampON = false;
 
 lampButton.onclick = function () {
-    let img = this.querySelector("img");
-    lampButton.classList.toggle("lightON");
-    lampButton.classList.toggle("bordinha");
+  let img = this.querySelector("img");
+  lampButton.classList.toggle("lightON");
+  lampButton.classList.toggle("bordinha");
 
-
-    if (img.src.includes("light-bulb-night.png")) {
-        img.src = "./images/light-bulb.png";
-        lampON = true;
-    } else {
-        img.src = "./images/light-bulb-night.png";
-        lampON = false;
-    }
+  if (img.src.includes("light-bulb-night.png")) {
+    img.src = "./images/light-bulb.png";
+    lampON = true;
+  } else {
+    img.src = "./images/light-bulb-night.png";
+    lampON = false;
+  }
+  set_data(); // toda vez que muda, manda pro Firebase
 };
 
 let switchElement = document.querySelector(".switch");
 let switchText = document.querySelector(".switch-text");
 let slider = document.querySelector(".slider");
 
-let isAutomatic = true;
+export let isAutomatic = true;
 
 switchElement.onclick = function () {
-    isAutomatic = !isAutomatic;
-    switchElement.classList.toggle("active");
-    switchElement.classList.toggle("gradient")
-    
-    if (isAutomatic) {
-        switchText.textContent = "Manual";
-    } else {
-        switchText.textContent = "Automático";
-    }
+  isAutomatic = !isAutomatic;
+  switchElement.classList.toggle("active");
+  switchElement.classList.toggle("gradient");
+
+  switchText.textContent = isAutomatic ? "Manual" : "Automático";
+  set_data();
 };
 
 let buttons = document.querySelectorAll(".button");
-let button1 = false
-let button2 = false
-let button3 = false
+export let button1 = false;
+export let button2 = false;
+export let button3 = false;
 
 buttons.forEach((button) => {
-    button.onclick = function () {
-        active = document.querySelectorAll(".grid-active")
-        if (button.classList.contains("active-raining")) {
-            button1 = !button1;
-            if (button1 == true) {
-                active[0].classList.add("gradient")
-                
-            }
-            else {
-                active[0].classList.remove("gradient")
-            }
-            
-        }
-        if (button.classList.contains("active-airdrop")) {
-            button2 = !button2;
-            if (button2 == true) {
-                active[1].classList.add("gradient")
-                
-            }
-            else {
-                active[1].classList.remove("gradient")
-            }
-        }
-        if (button.classList.contains("active-door")){
-            button3 = !button3;
-            if (button3 == true) {
-                active[2].classList.add("gradient")
-                
-            }
-            else {
-                active[2].classList.remove("gradient")
-            }
-        }
-    };
+  button.onclick = function () {
+    let active = document.querySelectorAll(".grid-active");
+    if (button.classList.contains("active-raining")) {
+      button1 = !button1;
+      active[0].classList.toggle("gradient", button1);
+    }
+    if (button.classList.contains("active-airdrop")) {
+      button2 = !button2;
+      active[1].classList.toggle("gradient", button2);
+    }
+    if (button.classList.contains("active-door")) {
+      button3 = !button3;
+      active[2].classList.toggle("gradient", button3);
+    }
+    set_data();
+  };
 });
 
-// import { getSensorData } from './apiRequests.js'; // se estiver usando módulos
+// ----------------------- Att Text -----------------------
 
-// document.addEventListener("DOMContentLoaded", async () => {
-//     const dados = await getSensorData();
+let tempInt = document.querySelector(".temp-interna")
+let tempExt = document.querySelector(".temp-externa")
+let umityInt =  document.querySelector(".umid-interna")
+let umityExt = document.querySelector(".umid-externa")
+let umityGND = document.querySelector(".solo-interno")
 
-//     document.querySelector(".temp-interna").textContent = `${dados.s_temp1 ?? 0}°C`;
-//     document.querySelector(".umid-interna").textContent = `${dados.s_umid1 ?? 0}%`;
-//     document.querySelector(".solo-interno").textContent = `${dados.s_umid2 ?? 0}%`;
-//     document.querySelector(".temp-externa").textContent = `${dados.s_temp2 ?? 0}°C`;
-//     document.querySelector(".umid-externa").textContent = `${dados.s_umid2 ?? 0}%`; // ou outro sensor externo
+tempInt.textContent = 
+tempExt.textContent = 
+umityInt.textContent = 
+umityExt.textContent = 
+umityGND.textContent = 
 
-//     const tanque = document.querySelector(".water");
-//     if (tanque && dados.s_tank) {
-//         tanque.style.height = `${dados.s_tank}%`;
-//     }
-// });
+
+
+
+// ----------------------- LOOP PARA ATUALIZAR -----------------------
+setInterval(async () => {
+  await service.load();
+}, 10000);
