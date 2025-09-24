@@ -14,7 +14,7 @@ const set_data = async () => {
         console.log(e)
     }
     
-    variavel.Acionadores = {"Irrigação" :  button1 ? 1 : 0, "Ventilação": button2 ? 1 : 0}
+    variavel.Acionadores = {"Irrigacao" :  button1 ? 1 : 0, "Ventilacao": button2 ? 1 : 0}
     variavel.Modos = {"Manual": isAutomatic ? 0 : 1, "Luz": lampON ? 1 : 0, "Comporta": button3 ? 1 : 0}
   service.set(variavel);
 };
