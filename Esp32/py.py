@@ -1,10 +1,40 @@
-from machine import Pin, ADC
+from machine import Pin, ADC, time_pulse_us
 import time
 import network
 import urequests
 import ujson
 import dht
 import socket
+
+#leds
+led1 = Pin(14, Pin.OUT)  
+led2 = Pin(32, Pin.OUT)  
+led3 = Pin(33, Pin.OUT)
+led4 = Pin(25, Pin.OUT)
+led5 = Pin(27, Pin.OUT)
+
+#ultrasom
+TRIG = Pin(18, Pin.OUT)
+ECHO = Pin(19, Pin.IN)
+
+def get_distance():
+    # Dispara pulso
+    TRIG.value(0)
+    time.sleep_us(5)
+    TRIG.value(1)
+    time.sleep_us(10)
+    TRIG.value(0)
+    print("pulso enviado")
+    
+    # Mede tempo em microssegundos
+    duracao = time_pulse_us(ECHO, 1, 60000)
+    print("duração: ", duracao)
+    
+    if duracao < 0:
+        return None  # erro na leitura
+
+    # Calcula distância em cm
+    return (duracao * 0.0343) / 2
 
 #Credenciais do WIFI
 nome = "123456"
@@ -54,7 +84,14 @@ conectarWifi()
 
 
 while True:
-     
+    
+    led1.value(1)
+    led2.value(1)
+    led3.value(1)
+    led4.value(1)
+    led5.value(1)
+
+
     sensor_ldr = ADC(Pin(34))
     sensor_dht = dht.DHT11(Pin(26))
     
@@ -85,12 +122,22 @@ while True:
     light = dataM["Luz"]
     manual = dataM["Manual"]
     
+    # led1 = Irrigacao
+    # led2 = Ventilacao
+    # led3 = Door
+    # led4 = Luz
+    # led5 = Automatico
+    
     if manual == 1:
         if dht_t >= 25:
             enviarFire(1, "Acionadores/Ventilacao")
-        
-        if dht_h <= 20:
-            enviarFire(1, "Acionadores/Irrigacao")
+            led1.value(1)
+            
+    dist = get_distance()
+    if dist:
+        print("Distancia: {:.2f} cm".format(dist))
+    else:
+        print("Erro de leitura")
         
     enviarFire(data, "Sensores")
     time.sleep(1)
