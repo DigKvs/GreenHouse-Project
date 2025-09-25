@@ -89,6 +89,9 @@ while True:
         if dht_t >= 25:
             enviarFire(1, "Acionadores/Ventilacao")
         
+        if dht_h <= 20:
+            enviarFire(1, "Acionadores/Irrigacao")
+        
     enviarFire(data, "Sensores")
     time.sleep(1)
 
