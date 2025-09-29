@@ -12,7 +12,7 @@ led2 = Pin(32, Pin.OUT)
 led3 = Pin(33, Pin.OUT)
 led4 = Pin(25, Pin.OUT)
 led5 = Pin(27, Pin.OUT)
-
+rele1 = Pin(12,Pin.OUT)
 #ultrasom
 TRIG = Pin(18, Pin.OUT)
 ECHO = Pin(19, Pin.IN)
@@ -34,7 +34,7 @@ def get_distance():
         return None  # erro na leitura
 
     # Calcula distância em cm
-    return (duracao * 0.0343) / 2
+    return (duracao * 0.0343) / 2 
 
 #Credenciais do WIFI
 nome = "123456"
@@ -85,22 +85,16 @@ conectarWifi()
 
 while True:
     
-    led1.value(1)
-    led2.value(1)
-    led3.value(1)
-    led4.value(1)
-    led5.value(1)
-
-
     sensor_ldr = ADC(Pin(34))
     sensor_dht = dht.DHT11(Pin(26))
+
     
     sensor_ldr.atten(ADC.ATTN_11DB)
     sensor_ldr.width(ADC.WIDTH_12BIT)
     
         
     sensor_dht.measure()
-    dht_h = sensor_dht.humidity()
+    dht_h = sensor_dht.humidity() 
     print(f"umity: {dht_h}")
     
     dht_t = sensor_dht.temperature()
@@ -128,10 +122,43 @@ while True:
     # led4 = Luz
     # led5 = Automatico
     
-    if manual == 1:
-        if dht_t >= 25:
+    if manual == 1: #Automatico
+        led5.value(0)
+        if dht_t >= 18:
             enviarFire(1, "Acionadores/Ventilacao")
+            led2.value(1)
+            rele1.value(1)
+            
+    else:
+        led5.value(1)
+        irrigacao = getData("Acionadores/Irrigacao")
+        ventilacao = getData("Acionadores/Ventilacao")
+        luz = getData("Modos/Luz")
+        comporta = getData("Modos/Comporta")
+        
+        print(irrigacao, ventilacao, luz, comporta)
+        
+        if irrigacao == 1:
             led1.value(1)
+        if ventilacao == 1:
+            led2.value(1)
+            rele1.value(1)
+        if luz == 1:
+            led3.value(1)
+        if comporta == 1:
+            led4.value(1)
+            
+        if irrigacao == 0:
+            led1.value(0)
+        if ventilacao == 0:
+            led2.value(0)
+            rele1.value(0)
+        if luz == 0:
+            led3.value(0)
+        if comporta == 0:
+            led4.value(0)  
+        
+            
             
     dist = get_distance()
     if dist:
@@ -141,5 +168,6 @@ while True:
         
     enviarFire(data, "Sensores")
     time.sleep(1)
-
-
+    
+    
+    
