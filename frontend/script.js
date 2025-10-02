@@ -21,7 +21,7 @@ const set_data = async () => {
 
 // ----------------------- BOTÕES -----------------------
 let lampButton = document.querySelector(".lampButton");
-export let lampON = false;
+export let lampON = false; 
 
 lampButton.onclick = function () {
   let img = this.querySelector("img");
@@ -37,7 +37,7 @@ lampButton.onclick = function () {
   }
   set_data(); // toda vez que muda, manda pro Firebase
 };
-
+0
 let switchElement = document.querySelector(".switch");
 let switchText = document.querySelector(".switch-text");
 let slider = document.querySelector(".slider");
@@ -79,22 +79,47 @@ buttons.forEach((button) => {
 
 // ----------------------- Att Text -----------------------
 
-let tempInt = document.querySelector(".temp-interna")
-let tempExt = document.querySelector(".temp-externa")
-let umityInt =  document.querySelector(".umid-interna")
-let umityExt = document.querySelector(".umid-externa")
-let umityGND = document.querySelector(".solo-interno")
+// Pegando os elementos na página
+let tempInt = document.querySelector(".temp-interna");
+let tempExt = document.querySelector(".temp-externa");
+let umityInt = document.querySelector(".umid-interna");
+let umityExt = document.querySelector(".umid-externa");
+let umityGND = document.querySelector(".solo-interno");
 
-tempInt.textContent = 
-tempExt.textContent = 
-umityInt.textContent = 
-umityExt.textContent = 
-umityGND.textContent = 
+// Função para atualizar os sensores na tela
+function atualizarSensores(data) {
+  console.log("Dados recebidos para atualizar sensores:", data);
 
+  // Dados dentro da chave "Sensores"
+  const sensores = data.Sensores || {};
 
+  // Atualiza temperatura interna (baseado na sua estrutura, só tem uma temperatura mesmo)
+  tempInt.textContent = sensores.Temperatura !== undefined ? sensores.Temperatura + " °C" : "—";
 
+  // Como você não tem dados externos e solo, deixa com "—" ou pode remover esses elementos
+  tempExt.textContent = "—";
+  umityInt.textContent = sensores.Umidade !== undefined ? sensores.Umidade + " %" : "—";
+  umityExt.textContent = "—";
+  umityGND.textContent = "—";
+}
 
-// ----------------------- LOOP PARA ATUALIZAR -----------------------
+// Função para buscar e atualizar a cada 10 segundos
 setInterval(async () => {
-  await service.load();
+  try {
+    const dados = await service.load();
+    atualizarSensores(dados);
+  } catch (error) {
+    console.error("Erro ao carregar dados:", error);
+  }
 }, 10000);
+
+// Busca inicial ao carregar a página
+(async () => {
+  try {
+    const dados = await service.load();
+    atualizarSensores(dados);
+  } catch (error) {
+    console.error("Erro ao carregar dados:", error);
+  }
+})();
+0
