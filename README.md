@@ -26,5 +26,3 @@ Automated Strawberry Greenhouse with watering, ventilation, and other control sy
 ### 📱 Project Overview
 
 The project aims to create an automated system to control various environmental factors inside a strawberry greenhouse. By using sensors and actuators, we can maintain optimal conditions for plant growth and ensure efficient energy use.
-
----
