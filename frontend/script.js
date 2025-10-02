@@ -122,4 +122,3 @@ setInterval(async () => {
     console.error("Erro ao carregar dados:", error);
   }
 })();
-0
