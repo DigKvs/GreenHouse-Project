@@ -97,9 +97,9 @@ function atualizarSensores(data) {
   tempInt.textContent = sensores.Temperatura !== undefined ? sensores.Temperatura + " °C" : "—";
 
   // Como você não tem dados externos e solo, deixa com "—" ou pode remover esses elementos
-  tempExt.textContent = "—";
+  tempExt.textContent = sensores.Temperatura_Ext !== undefined ? sensores.Temperatura_Ext + " °C" : "—";
   umityInt.textContent = sensores.Umidade !== undefined ? sensores.Umidade + " %" : "—";
-  umityExt.textContent = "—";
+  umityExt.textContent = sensores.Umidade_Ext !== undefined ? sensores.Umidade_Ext + " %" : "—";
   umityGND.textContent = "—";
 }
 

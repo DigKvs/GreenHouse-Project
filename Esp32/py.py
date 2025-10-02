@@ -10,8 +10,8 @@ import socket
 led1 = Pin(14, Pin.OUT)  
 led2 = Pin(32, Pin.OUT)  
 led3 = Pin(33, Pin.OUT)
-led4 = Pin(25, Pin.OUT)
-led5 = Pin(27, Pin.OUT)
+led4 = Pin(5, Pin.OUT)
+led5 = Pin(4, Pin.OUT)
 rele1 = Pin(12,Pin.OUT)
 #ultrasom
 TRIG = Pin(18, Pin.OUT)
@@ -20,9 +20,9 @@ ECHO = Pin(19, Pin.IN)
 def get_distance():
     # Dispara pulso
     TRIG.value(0)
-    time.sleep_us(5)
+    time.sleep_us(1)
     TRIG.value(1)
-    time.sleep_us(10)
+    time.sleep_us(1)
     TRIG.value(0)
     print("pulso enviado")
     
@@ -31,6 +31,7 @@ def get_distance():
     print("duração: ", duracao)
     
     if duracao < 0:
+        0
         return None  # erro na leitura
 
     # Calcula distância em cm
@@ -86,7 +87,8 @@ conectarWifi()
 while True:
     
     sensor_ldr = ADC(Pin(34))
-    sensor_dht = dht.DHT11(Pin(26))
+    sensor_dht = dht.DHT11(Pin(25))
+    sensor_dht_ext = dht.DHT11(Pin(26))
 
     
     sensor_ldr.atten(ADC.ATTN_11DB)
@@ -94,16 +96,24 @@ while True:
     
         
     sensor_dht.measure()
+    sensor_dht_ext.measure()
+    
     dht_h = sensor_dht.humidity() 
     print(f"umity: {dht_h}")
     
     dht_t = sensor_dht.temperature()
     print(f"temp: {dht_t}")
     
+    dht_h_ext = sensor_dht_ext.humidity() 
+    print(f"umity_ext: {dht_h_ext}")
+    
+    dht_t_ext = sensor_dht_ext.temperature()
+    print(f"temp_ext: {dht_t_ext}")
+    
     Sinal_ldr = sensor_ldr.read()
     print(f"Luz: {Sinal_ldr}")
     
-    data = {"Umidade": dht_h, "Temperatura": dht_t, "Luz": Sinal_ldr}
+    data = {"Umidade": dht_h, "Temperatura": dht_t, "Luz": Sinal_ldr, "Temperatura_Ext": dht_t_ext, "Umidade_Ext": dht_h_ext}
     
     print("-----------")
     
@@ -124,7 +134,7 @@ while True:
     
     if manual == 1: #Automatico
         led5.value(0)
-        if dht_t >= 18:
+        if dht_t >= 21:
             enviarFire(1, "Acionadores/Ventilacao")
             led2.value(1)
             rele1.value(1)
@@ -168,6 +178,4 @@ while True:
         
     enviarFire(data, "Sensores")
     time.sleep(1)
-    
-    
     
