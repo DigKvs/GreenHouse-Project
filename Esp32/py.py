@@ -1,10 +1,12 @@
-from machine import Pin, ADC, time_pulse_us
+from machine import Pin, ADC, time_pulse_us, PWM
 import time
 import network
 import urequests
 import ujson
 import dht
 import socket
+
+
 
 #leds
 led1 = Pin(14, Pin.OUT)  
@@ -16,6 +18,27 @@ rele1 = Pin(12,Pin.OUT)
 #ultrasom
 TRIG = Pin(18, Pin.OUT)
 ECHO = Pin(19, Pin.IN)
+#buzzer
+buzz = Pin(13, Pin.OUT)
+
+    notas = {
+    'B3': 247, 'C4': 261, 'C#4': 277, 'D4': 294, 'D#4': 311, 'E4': 330,
+    'F4': 349, 'F#4': 370, 'G4': 392, 'G#4': 415, 'A4': 440, 'A#4': 466,
+    'B4': 494, 'C5': 523, 'C#5': 554, 'D5': 587, 'D#5': 622, 'E5': 659,
+    'F5': 698, 'F#5': 740, 'G5': 784, 'G#5': 831, 'A5': 880, 'A#5': 932,
+    'B5': 988, 'C6': 1047
+}
+    
+def tocarmusica(freq,duracao):
+    if freq == 0: 
+        buzzer.duty(0)
+    else:
+        buzzer.freq(freq)
+        buzzer.duty(512)
+    time.sleep(duracao)
+    buzzer.duty(0)
+    time.sleep(0.02)
+
 
 def get_distance():
     # Dispara pulso
@@ -95,7 +118,7 @@ while True:
     sensor_ldr.width(ADC.WIDTH_12BIT)
     
         
-    sensor_dht.measure()
+    #sensor_dht.measure()
     sensor_dht_ext.measure()
     
     dht_h = sensor_dht.humidity() 
@@ -113,7 +136,13 @@ while True:
     Sinal_ldr = sensor_ldr.read()
     print(f"Luz: {Sinal_ldr}")
     
-    data = {"Umidade": dht_h, "Temperatura": dht_t, "Luz": Sinal_ldr, "Temperatura_Ext": dht_t_ext, "Umidade_Ext": dht_h_ext}
+    dist = get_distance()
+    if dist:
+        print("Distancia: {:.2f} cm".format(dist))
+    else:
+        print("Erro de leitura")
+    
+    data = {"Umidade": dht_h, "Temperatura": dht_t, "Luz": Sinal_ldr, "Temperatura_Ext": dht_t_ext, "Umidade_Ext": dht_h_ext, "Distancia": dist}
     
     print("-----------")
     
@@ -125,6 +154,7 @@ while True:
     door = dataM["Comporta"]
     light = dataM["Luz"]
     manual = dataM["Manual"]
+    
     
     # led1 = Irrigacao
     # led2 = Ventilacao
@@ -168,13 +198,6 @@ while True:
         if comporta == 0:
             led4.value(0)  
         
-            
-            
-    dist = get_distance()
-    if dist:
-        print("Distancia: {:.2f} cm".format(dist))
-    else:
-        print("Erro de leitura")
         
     enviarFire(data, "Sensores")
     time.sleep(1)

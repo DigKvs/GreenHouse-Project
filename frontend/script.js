@@ -85,6 +85,17 @@ let tempExt = document.querySelector(".temp-externa");
 let umityInt = document.querySelector(".umid-interna");
 let umityExt = document.querySelector(".umid-externa");
 let umityGND = document.querySelector(".solo-interno");
+let water = document.querySelector(".water");
+
+
+
+function calcularNivel(distancia) {
+  let nivel = -4 * distancia + 120;
+  // Garante entre 0 e 100%
+  if (nivel < 0) nivel = 0;
+  if (nivel > 100) nivel = 100;
+  return nivel;
+}
 
 // Função para atualizar os sensores na tela
 function atualizarSensores(data) {
@@ -101,9 +112,30 @@ function atualizarSensores(data) {
   umityInt.textContent = sensores.Umidade !== undefined ? sensores.Umidade + " %" : "—";
   umityExt.textContent = sensores.Umidade_Ext !== undefined ? sensores.Umidade_Ext + " %" : "—";
   umityGND.textContent = "—";
+
+  let distancia = sensores.Distancia
+  const distanciaCheio = 7.5
+  const distanciaVazio = 11.7
+  const alturaTotal = 90
+
+  // Garante que o valor fique dentro dos limites
+  if (distancia < distanciaCheio) distancia = distanciaCheio;
+  if (distancia > distanciaVazio) distancia = distanciaVazio;
+
+  // Converte distância em porcentagem de nível
+  let nivel = ((distanciaVazio - distancia) / (distanciaVazio - distanciaCheio)) * 100;
+  let porcentagemNivel = nivel; // nível de água real (0–100%)
+
+  // Calcula a altura visual baseada nos 90%
+  let alturaAgua = (porcentagemNivel / 100) * alturaTotal;
+  let top = 90 - alturaAgua;
+
+  // Atualiza o elemento
+  water.style.height = `${alturaAgua}%`;
+  water.style.top = `${top}%`;
 }
 
-// Função para buscar e atualizar a cada 10 segundos
+// Função para buscar e atualizar a cada 5 segundos
 setInterval(async () => {
   try {
     const dados = await service.load();
@@ -111,7 +143,7 @@ setInterval(async () => {
   } catch (error) {
     console.error("Erro ao carregar dados:", error);
   }
-}, 10000);
+}, 5000);
 
 // Busca inicial ao carregar a página
 (async () => {

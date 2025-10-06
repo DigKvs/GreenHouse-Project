@@ -195,6 +195,9 @@ body {
 }
 
 .water {
+    position: relative;
+    left: 0.5%;
+    top: 0%;
     height: 90%;
     background-color: #4646DB;
     opacity: 72%;
