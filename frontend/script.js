@@ -111,7 +111,7 @@ function atualizarSensores(data) {
   tempExt.textContent = sensores.Temperatura_Ext !== undefined ? sensores.Temperatura_Ext + " °C" : "—";
   umityInt.textContent = sensores.Umidade !== undefined ? sensores.Umidade + " %" : "—";
   umityExt.textContent = sensores.Umidade_Ext !== undefined ? sensores.Umidade_Ext + " %" : "—";
-  umityGND.textContent = "—";
+  umityGND.textContent = sensores.Umidade_Solo !== undefined ? sensores.Umidade_Solo + " %" : "—";
 
   let distancia = sensores.Distancia
   const distanciaCheio = 7.5

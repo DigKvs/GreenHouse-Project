@@ -17,9 +17,8 @@ import socket
     
 led1 = Pin(14, Pin.OUT)
 rele2 = Pin(32, Pin.OUT)
-led3 = Pin(33, Pin.OUT)
-led4 = Pin(5, Pin.OUT)
-led5 = Pin(4, Pin.OUT)
+rele3 = Pin(33, Pin.OUT)
+dht_solo = ADC(Pin(4))
 
 rele1 = Pin(12,Pin.OUT)
 #ultrasom
@@ -141,7 +140,7 @@ while True:
     sensor_ldr.width(ADC.WIDTH_12BIT)
     
         
-    sensor_dht.measure()
+    #sensor_dht.measure()
     sensor_dht_ext.measure()
     
     dht_h = sensor_dht.humidity() 
@@ -181,8 +180,6 @@ while True:
     
     # led1 = Irrigacao
     # led2 = Ventilacao
-    # led3 = Door
-    # led4 = Luz
     # led5 = Automatico
     
     if manual == 1: #Automatico
@@ -197,11 +194,9 @@ while True:
         led5.value(1)
         irrigacao = getData("Acionadores/Irrigacao")
         ventilacao = getData("Acionadores/Ventilacao")
-        luz = getData("Modos/Luz")
+        light = getData("Modos/Luz")
         comporta = getData("Modos/Comporta")
-        
-        print(irrigacao, ventilacao, luz, comporta)
-        
+                
         if irrigacao == 1:
             
             led1.value(1)
@@ -215,12 +210,11 @@ while True:
             
         if ventilacao == 1:
             rele2.value(1)            
-            led3.value(1)
             
-        # if luz == 1:
-            
-        if comporta == 1:
-            led4.value(1)
+        if light == 1:
+            rele3.value(1)
+
+        # if comporta == 1:
             
         if irrigacao == 0:
             led1.value(0)
@@ -230,16 +224,18 @@ while True:
         if ventilacao == 0:
             rele2.value(0)
             rele1.value(0)
-            led3.value(0)
-        #if luz == 0:
+
+        if light == 0:
+            rele3.value(0)
             
-        if comporta == 0:
-            led4.value(0)  
+        # if comporta == 0:
         
         
     enviarFire(data, "Sensores")
     time.sleep(1)
     
+
+
 
 
 

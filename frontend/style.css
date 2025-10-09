@@ -10,6 +10,7 @@ body {
     justify-content: center;
     align-items: center;
     background-color: #505050;
+    user-select: none;
 }
 
 .body {
@@ -262,6 +263,10 @@ body {
     grid-template-rows: repeat(2, 1fr);
 }
 
+.button1 {   
+    background-color: grey;
+}
+
 .button {   
     background-color: #A7D477;
 }
@@ -304,6 +309,9 @@ body {
     grid-template-columns: 30% 70%;
     grid-template-rows: 1fr;
     margin-top: 20px;
+    border: dashed 5px black;
+    pointer-events: none;
+    cursor: not-allowed;
 }
 
 .img-manual {
